@@ -51,7 +51,6 @@ Plugin 'vim-syntastic/syntastic'
 Plugin 'neomake/neomake'
 
 " Markdown / Writting
-Plugin 'reedes/vim-pencil'
 Plugin 'tpope/vim-markdown'
 Plugin 'jtratner/vim-flavored-markdown'
 Plugin 'LanguageTool'
@@ -61,10 +60,6 @@ Plugin 'kablamo/vim-git-log'
 Plugin 'gregsexton/gitv'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-
-" PHP Support
-Plugin 'phpvim/phpcd.vim'
-Plugin 'tobyS/pdv'
 
 " Erlang Support
 Plugin 'vim-erlang/vim-erlang-tags'
@@ -130,7 +125,7 @@ set expandtab
 set laststatus=2
 
 " Enable Elite mode, No ARRRROWWS!!!!
-let g:elite_mode=1
+let g:elite_mode=0
 
 " Enable highlighting of the current line
 set cursorline
@@ -153,6 +148,8 @@ let g:spacegray_italicize_comments = 1
 " Vim-Airline Configuration
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
+" let g:airline#extensions#tabline#left_sep = ' '
+" let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_theme='hybrid'
 let g:hybrid_custom_term_colors = 1
 let g:hybrid_reduced_contrast = 1
@@ -193,15 +190,7 @@ let g:alchemist_tag_disable = 1
 let g:SuperTabDefaultCompletionType = "<C-X><C-O>"
 
 " Settings for Writting
-let g:pencil#wrapModeDefault = 'soft'   " default is 'hard'
 let g:languagetool_jar  = '/opt/languagetool/languagetool-commandline.jar'
-
-" Vim-pencil Configuration
-augroup pencil
-  autocmd!
-  autocmd FileType markdown,mkd call pencil#init()
-  autocmd FileType text         call pencil#init()
-augroup END
 
 " Vim-UtilSnips Configuration
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
@@ -232,18 +221,17 @@ if !exists('g:neocomplete#keyword_patterns')
 endif
 let g:neocomplete#keyword_patterns['default'] = '\h\w*'
 
-function! s:my_cr_function()
-  return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
+" function! s:my_cr_function()
+"   return (pumvisible() ? "\<C-y>" : "" ) . "\<CR>"
   " For no inserting <CR> key.
   "return pumvisible() ? "\<C-y>" : "\<CR>"
-endfunction
+" endfunction
 
 " Close popup by <Space>.
 "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
 " AutoComplPop like behavior.
 "let g:neocomplete#enable_auto_select = 1
-
 
 " Enable omni completion.
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -304,7 +292,6 @@ let g:fzf_history_dir = '~/.local/share/fzf-history'
 " Mappings configurationn
 """""""""""""""""""""""""""""""""""""
 map <C-n> :NERDTreeToggle<CR>
-map <C-m> :TagbarToggle<CR>
 
 " Omnicomplete Better Nav
 inoremap <expr> <c-j> ("\<C-n>")
@@ -316,10 +303,10 @@ inoremap <expr><C-l>     neocomplete#complete_common_string()
 
 " Recommended key-mappings.
 " <CR>: close popup and save indent.
-inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 
-" <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <TAB>: completion. -- incompatible with elite = 0
+" inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
 
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
@@ -348,11 +335,6 @@ nmap <silent> <leader>a :TestSuite<CR>
 nmap <silent> <leader>l :TestLast<CR>
 nmap <silent> <leader>g :TestVisit<CR>
 
-" Vim-PDV Mappings
-autocmd FileType php inoremap <C-p> <ESC>:call pdv#DocumentWithSnip()<CR>i
-autocmd FileType php nnoremap <C-p> :call pdv#DocumentWithSnip()<CR>
-autocmd FileType php setlocal omnifunc=phpcd#CompletePHP
-
 " Disable arrow movement, resize splits instead.
 if get(g:, 'elite_mode')
 	nnoremap <Up>    :resize +2<CR>
@@ -374,4 +356,3 @@ autocmd FileType elixir nnoremap <buffer> <leader>d :call alchemist#exdef()<CR>
 let b:ale_linters = ['pyflakes', 'flake8', 'pylint']
 let b:ale_fixers = ['eslint']
 let b:ale_fix_on_save = 1
-
